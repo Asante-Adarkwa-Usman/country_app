@@ -16,7 +16,7 @@ class CountryRepositoryImpl(
             if (result.isSuccessful) {
                 val countryList = result.body()
                 countryList?.let {
-                    val sortedList = it.sortedBy { country ->  country.name } //sorts country in alphabetic order
+                    val sortedList = it.sortedBy { country ->  country.name }
                     emit(UiStatus.Success(ArrayList(sortedList)))
                 } ?: emit(UiStatus.Error("Country is null or empty"))
             } else {
