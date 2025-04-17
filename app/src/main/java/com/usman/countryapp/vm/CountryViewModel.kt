@@ -5,26 +5,25 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.usman.countryapp.data.model.CountryItemModel
-import com.usman.countryapp.data.repository.CountryRepositoryImpl
+import com.usman.countryapp.data.repository.CountryRepository
 import com.usman.countryapp.utils.UiStatus
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CountryViewModel(
-    private val countryRepositoryImpl: CountryRepositoryImpl
+    private val countryRepository: CountryRepository,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ): ViewModel() {
 
     private val _countries = MutableLiveData<UiStatus<ArrayList<CountryItemModel>>>(UiStatus.Loading)
     val countries : LiveData<UiStatus<ArrayList<CountryItemModel>>> = _countries
 
     fun getAllCountries(){
-        viewModelScope.launch(Dispatchers.IO) {
-            countryRepositoryImpl.getAllCountries().collect{
+        viewModelScope.launch(dispatcher) {
+            countryRepository.getAllCountries().collect{
                 _countries.postValue(it)
             }
         }
     }
-
-
-
 }
